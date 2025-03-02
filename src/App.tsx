@@ -1,9 +1,11 @@
 import { Toaster } from "react-hot-toast";
+import { Github } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
 import { PasswordForm } from "./components/password-form";
 import { ThemeProvider } from "./lib/theme-provider";
 import { ThemeToggle } from "./components/theme-toggle";
+import { ExternalLink } from "./components/external-link";
 
 import "./index.css";
 
@@ -20,6 +22,9 @@ export function App() {
             <PasswordForm />
           </CardContent>
         </Card>
+        <div className="flex items-center justify-center mt-4 gap-1">
+          <ExternalLink to="https://github.com/splorg/password-generator" label="Source" icon={<Github className="w-4 h-4" />} />
+        </div>
       </main>
       <Toaster
         position="bottom-right"
