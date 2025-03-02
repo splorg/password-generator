@@ -13,17 +13,46 @@ import { Input } from "./ui/input";
 import { Slider } from "./ui/slider";
 import { Switch } from "./ui/switch";
 
+const STORAGE_KEY = "password-generator-preferences";
+
+const DEFAULT_VALUES = {
+  length: 12,
+  uppercase: false,
+  numbers: false,
+  symbols: false,
+};
+
+const saveToLocalStorage = (values: PasswordFormType) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+};
+
+const loadFromLocalStorage = (): PasswordFormType => {
+  const storedValues = localStorage.getItem(STORAGE_KEY);
+
+  if (storedValues) {
+    try {
+      const parsedValues = JSON.parse(storedValues);
+
+      return {
+        length: Number(parsedValues.length) || DEFAULT_VALUES.length,
+        uppercase: Boolean(parsedValues.uppercase),
+        numbers: Boolean(parsedValues.numbers),
+        symbols: Boolean(parsedValues.symbols),
+      };
+    } catch (error) {
+      console.error("Error parsing stored preferences:", error);
+    }
+  }
+
+  return DEFAULT_VALUES;
+};
+
 export const PasswordForm = () => {
   const [password, setPassword] = useState("");
 
   const form = useForm<PasswordFormType>({
     resolver: zodResolver(passwordFormSchema),
-    defaultValues: {
-      length: 12,
-      uppercase: false,
-      numbers: false,
-      symbols: false,
-    },
+    defaultValues: loadFromLocalStorage(),
   });
 
   const generatePassword = (data: PasswordFormType) => {
@@ -70,10 +99,13 @@ export const PasswordForm = () => {
   }, [])
 
   useEffect(() => {
-    const { unsubscribe } = form.watch(() => form.handleSubmit(generatePassword)())
+    const { unsubscribe } = form.watch((values) => {
+      saveToLocalStorage(values);
+      form.handleSubmit(generatePassword)();
+    });
 
-    return () => unsubscribe()
-  }, [form.handleSubmit, form.watch])
+    return () => unsubscribe();
+  }, [form.handleSubmit, form.watch]);
 
   return (
     <Form {...form}>
