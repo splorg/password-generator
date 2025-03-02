@@ -1,5 +1,11 @@
 # Password Generator
 
+I made this so I don't have to go on LastPass's generator everytime and get bombarded with ads and light theme and cookie banners etc etc whenever I want a password
+
+Access here: https://password-generator.gabriellima.dev/
+
+## Running locally:
+
 To install dependencies:
 
 ```bash
