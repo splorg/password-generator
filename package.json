@@ -9,7 +9,7 @@
     "dev": "bun --hot src/index.tsx",
     "start": "NODE_ENV=production bun src/index.tsx",
     "build": "bun run build.ts",
-    "deploy": "bun install && bun run build"
+    "deploy": "bun install && bun run build --sourcemap=none"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.0",
